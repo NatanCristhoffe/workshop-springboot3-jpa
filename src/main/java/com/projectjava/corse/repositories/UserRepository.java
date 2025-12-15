@@ -6,5 +6,4 @@ import com.projectjava.corse.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{
 	
-	
 }
