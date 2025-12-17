@@ -8,11 +8,19 @@ import org.springframework.stereotype.Service;
 
 import com.projectjava.corse.entities.User;
 import com.projectjava.corse.repositories.UserRepository;
+import com.projectjava.corse.resources.exceptions.ResourceExceptionHandler;
+import com.projectjava.corse.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService {
+
+    private final ResourceExceptionHandler resourceExceptionHandler;
 	@Autowired
 	private UserRepository repository;
+
+    UserService(ResourceExceptionHandler resourceExceptionHandler) {
+        this.resourceExceptionHandler = resourceExceptionHandler;
+    }
 	
 	public List<User> findAll(){
 		return repository.findAll();
@@ -20,7 +28,7 @@ public class UserService {
 	
 	public User findById(Long id){
 		Optional<User> user = repository.findById(id);
-		return user.get();
+		return user.orElseThrow(() -> new ResourceNotFoundException(id));
 	}
 	
 	public User insert(User obj) {
